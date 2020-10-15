@@ -1,8 +1,9 @@
 #include "Parser.h"
+#include <cctype>
 
 using namespace std;
 
-vector<string_view> SplitIntoWords(string_view text)
+vector<string_view> split_into_words(string_view text)
 {
   vector<string_view> result;
 
@@ -24,13 +25,32 @@ vector<string_view> SplitIntoWords(string_view text)
   return result;
 }
 
-Parser::Parser(string_view input) {
-  tokens = SplitIntoWords(input);
+TokenType get_token_type(string_view token)
+{
+  TokenType result = TokenType::Number;
+
+  for (auto c : token)
+  {
+    if (!std::isdigit(c))
+    {
+      result = TokenType::Word;
+      break;
+    }
+  }
+
+  return result;
 }
 
-template<typename TriggerD, typename TriggerW>
-void runTriggers(TriggerD DigitTrigger, 
-                    TriggerW WordTrigger) 
+Parser::Parser(string_view input)
 {
-  
+  for (auto token : split_into_words(input))
+  {
+    types.emplace_back(get_token_type(token));
+  }
+}
+
+template <typename TriggerD, typename TriggerW>
+void runTriggers(TriggerD DigitTrigger,
+                 TriggerW WordTrigger)
+{
 }
