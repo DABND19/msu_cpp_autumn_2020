@@ -1,16 +1,19 @@
 CC=g++
 FLAGS=-std=c++17
 
-all: test
+all: my_allocator
 
-test: main.o allocator.o
-	$(CC) $(FLAGS) -o test main.o allocator.o
+my_allocator: main.o allocator.o
+	$(CC) $(FLAGS) -o my_allocator main.o allocator.o
 
 main.o: main.cpp
 	$(CC) $(FLAGS) -c main.cpp
 
 allocator.o: allocator.cpp allocator.h
 	$(CC) $(FLAGS) -c allocator.cpp
+
+test: my_allocator
+	./my_allocator
 
 clean:
 	rm -rf *.o my_allocator

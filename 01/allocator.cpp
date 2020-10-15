@@ -9,7 +9,10 @@ Allocator::~Allocator()
 
 void Allocator::makeAllocator(size_t maxSize)
 {
-  if (data == nullptr)
+  //  если вызываем метод второй раз 
+  //  (т.е. в data уже что-то лежит)
+  //  то делает delete []
+  if (data != nullptr)
   {
     delete[] data;
   }
