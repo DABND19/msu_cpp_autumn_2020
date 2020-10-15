@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 vector<string_view> split_into_words(string_view text)
 {
   vector<string_view> result;
