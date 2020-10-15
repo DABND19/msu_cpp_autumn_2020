@@ -21,7 +21,7 @@ void Allocator::makeAllocator(size_t maxSize)
 
 char *Allocator::alloc(size_t size)
 {
-  if (size > capacity - end)
+  if (size + end > capacity)
   {
     return nullptr;
   }
