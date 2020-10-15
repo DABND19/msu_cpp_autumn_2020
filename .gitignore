@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/c++,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=c++,linux
+# Created by https://www.toptal.com/developers/gitignore/api/vscode,c++,linux,executable
+# Edit at https://www.toptal.com/developers/gitignore?templates=vscode,c++,linux,executable
 
 ### C++ ###
 # Prerequisites
@@ -36,6 +36,16 @@
 *.out
 *.app
 
+### Executable ###
+*.bat
+*.cgi
+*.com
+*.gadget
+*.jar
+*.pif
+*.vb
+*.wsf
+
 ### Linux ###
 *~
 
@@ -51,4 +61,12 @@
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-# End of https://www.toptal.com/developers/gitignore/api/c++,linux
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/vscode,c++,linux,executable
