@@ -15,10 +15,10 @@ public:
 
   TokenParser() = default;
 
-  void setStartTrigger(std::function<void(void)> startTrigger);
-  void setStringTrigger(std::function<void(const std::string &)> stringTrigger);
-  void setNumberTrigger(std::function<void(int64_t)> numberTrigger);
-  void setFinishTrigger(std::function<void(void)> finishTrigger);
+  void setStartTrigger(Trigger startTrigger);
+  void setStringTrigger(StringTrigger stringTrigger);
+  void setNumberTrigger(NumberTrigger numberTrigger);
+  void setFinishTrigger(Trigger finishTrigger);
 
   void runParser(std::istream &input);
   void runParser(const std::string &text);
