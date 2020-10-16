@@ -1,7 +1,7 @@
 CC=g++
 FLAGS=-std=c++17
 
-all: my_allocator
+all: my_parser
 
 my_parser: main.o TokenParser.o
 	$(CC) $(FLAGS) -o my_parser main.o TokenParser.o
@@ -16,4 +16,4 @@ test: my_parser
 	./my_parser
 
 clean:
-	rm -rf *.o my_allocator
+	rm -rf *.o my_parser
