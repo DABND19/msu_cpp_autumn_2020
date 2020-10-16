@@ -1,22 +1,22 @@
 #include "TokenParser.h"
 #include <exception>
 
-void TokenParser::setStartTrigger(std::function<void(void)> startTrigger)
+void TokenParser::setStartTrigger(Trigger startTrigger)
 {
   start_trigger = startTrigger;
 }
 
-void TokenParser::setStringTrigger(std::function<void(const std::string &)> stringTrigger)
+void TokenParser::setStringTrigger(StringTrigger stringTrigger)
 {
   string_trigger = stringTrigger;
 }
 
-void TokenParser::setNumberTrigger(std::function<void(int64_t)> numberTrigger)
+void TokenParser::setNumberTrigger(NumberTrigger numberTrigger)
 {
   number_trigger = numberTrigger;
 }
 
-void TokenParser::setFinishTrigger(std::function<void(void)> finishTrigger)
+void TokenParser::setFinishTrigger(Trigger finishTrigger)
 {
   finish_trigger = finishTrigger;
 }

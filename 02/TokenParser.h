@@ -8,13 +8,11 @@
 
 class TokenParser
 {
-private:
-  std::function<void(void)> start_trigger = []() {};
-  std::function<void(const std::string &)> string_trigger = [](const std::string &) {};
-  std::function<void(int64_t)> number_trigger = [](int64_t) {};
-  std::function<void(void)> finish_trigger = []() {};
-
 public:
+  using Trigger = std::function<void(void)>;
+  using StringTrigger = std::function<void(const std::string &)>;
+  using NumberTrigger = std::function<void(int64_t)>;
+
   TokenParser() = default;
 
   void setStartTrigger(std::function<void(void)> startTrigger);
@@ -24,4 +22,10 @@ public:
 
   void runParser(std::istream &input);
   void runParser(const std::string &text);
+
+private:
+  Trigger start_trigger = []() {};
+  StringTrigger string_trigger = [](const std::string &) {};
+  NumberTrigger number_trigger = [](int64_t) {};
+  Trigger finish_trigger = []() {};
 };
