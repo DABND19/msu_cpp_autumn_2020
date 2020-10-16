@@ -23,5 +23,5 @@ public:
   void setFinishTrigger(std::function<void(void)> finishTrigger);
 
   void runParser(std::istream &input);
-  void runParser(const std::string& text);
+  void runParser(const std::string &text);
 };

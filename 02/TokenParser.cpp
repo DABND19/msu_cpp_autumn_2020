@@ -35,7 +35,7 @@ void TokenParser::runParser(std::istream &input)
       size_t pos;
       number = std::stoll(token, &pos);
 
-      //  если в токене есть символы, 
+      //  если в токене есть символы,
       //  которые не удалось конвертировать,
       //  то будем считать его строкой
       if (pos != token.size())
@@ -54,7 +54,7 @@ void TokenParser::runParser(std::istream &input)
   finish_trigger();
 }
 
-void TokenParser::runParser(const std::string& text)
+void TokenParser::runParser(const std::string &text)
 {
   std::stringstream input(text);
   runParser(input);

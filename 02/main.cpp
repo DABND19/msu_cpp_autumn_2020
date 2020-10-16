@@ -11,7 +11,7 @@ void TestWithoutTriggers()
 
   p.runParser("Hello, World!!!");
 
-  std::cerr << "Test without triggers done!" << std::endl;
+  std::cerr << "Test without triggers is done!" << std::endl;
 }
 
 void TestEmptyString()
@@ -27,7 +27,7 @@ void TestEmptyString()
     output << "n ";
   });
 
-  p.setStringTrigger([&output](const std::string& word) {
+  p.setStringTrigger([&output](const std::string &word) {
     output << "w ";
   });
 
@@ -55,7 +55,7 @@ void TestTokenTypesAndChangeTriggers()
     output << "n ";
   });
 
-  p.setStringTrigger([&output](const std::string& word) {
+  p.setStringTrigger([&output](const std::string &word) {
     output << "w ";
   });
 
@@ -72,7 +72,7 @@ void TestTokenTypesAndChangeTriggers()
     output << "1 ";
   });
 
-  p.setStringTrigger([&output](const std::string& word) {
+  p.setStringTrigger([&output](const std::string &word) {
     output << "0 ";
   });
 
@@ -92,7 +92,7 @@ void TestChangeInputs()
 
   TokenParser p;
 
-  p.setStringTrigger([&output](const std::string& word) {
+  p.setStringTrigger([&output](const std::string &word) {
     output << word << " ";
   });
 
