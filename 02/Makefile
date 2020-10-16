@@ -3,14 +3,14 @@ FLAGS=-std=c++17
 
 all: my_allocator
 
-my_parser: main.o Parser.o
-	$(CC) $(FLAGS) -o my_parser main.o Parser.o
+my_parser: main.o TokenParser.o
+	$(CC) $(FLAGS) -o my_parser main.o TokenParser.o
 
 main.o: main.cpp
 	$(CC) $(FLAGS) -c main.cpp
 
-Parser.o: Parser.cpp Parser.h
-	$(CC) $(FLAGS) -c Parser.cpp
+TokenParser.o: TokenParser.h TokenParser.cpp
+	$(CC) $(FLAGS) -c TokenParser.cpp
 
 test: my_parser
 	./my_parser
