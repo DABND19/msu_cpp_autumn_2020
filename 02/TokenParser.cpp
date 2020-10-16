@@ -36,7 +36,7 @@ void TokenParser::runParser(std::istream &input)
       number = std::stoll(token, &pos);
 
       //  если в токене есть символы, 
-      //  которые не удалось конвертировать
+      //  которые не удалось конвертировать,
       //  то будем считать его строкой
       if (pos != token.size())
       {
