@@ -1,4 +1,5 @@
 #include "TokenParser.h"
+#include <sstream>
 #include <exception>
 
 void TokenParser::setStartTrigger(Trigger startTrigger)

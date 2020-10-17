@@ -1,10 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
 #include <functional>
 #include <string>
-#include <sstream>
 
 class TokenParser
 {
