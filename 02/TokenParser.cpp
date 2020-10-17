@@ -48,7 +48,7 @@ void TokenParser::runParser(std::istream &input)
         number_trigger(number);
       }
     }
-    catch (std::logic_error)
+    catch (const std::logic_error &)
     {
       string_trigger(token);
     }
