@@ -40,12 +40,14 @@ void TokenParser::runParser(std::istream &input)
       //  то будем считать его строкой
       if (pos != token.size())
       {
-        throw std::invalid_argument("");
+        string_trigger(token);
       }
-
-      number_trigger(number);
+      else
+      {
+        number_trigger(number);
+      }
     }
-    catch (...)
+    catch (std::logic_error)
     {
       string_trigger(token);
     }
