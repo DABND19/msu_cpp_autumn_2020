@@ -8,6 +8,8 @@ class Matrix {
   size_t rows_num;
   size_t columns_num;
 
+  size_t capacity() const;
+
  public:
   class Row {
    private:
@@ -27,7 +29,7 @@ class Matrix {
   Row operator[](size_t row_num) const;
   Row operator[](size_t row_num);
   std::pair<size_t, size_t> getSize() const;
-  Matrix operator*=(double alpha);
+  Matrix operator*=(int scalar);
   Matrix& operator=(const Matrix& equal);
   friend Matrix operator+(const Matrix& lhs, const Matrix& rhs);
   friend bool operator==(const Matrix& lhs, const Matrix& rhs);

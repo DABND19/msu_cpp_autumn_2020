@@ -25,30 +25,34 @@ int Matrix::Row::operator[](size_t column_num) const {
 
 size_t Matrix::Row::getSize() const { return size; }
 
+size_t Matrix::capacity() const { return rows_num * columns_num; }
+
 Matrix::Matrix(size_t rows, size_t columns) {
   rows_num = rows;
   columns_num = columns;
-  data = new int[rows_num * columns_num];
+  data = new int[capacity()];
 }
 
 Matrix::Matrix(const Matrix& copied) {
   rows_num = copied.rows_num;
   columns_num = copied.columns_num;
-  data = new int[rows_num * columns_num];
-  std::copy(copied.data, copied.data + rows_num * columns_num, data);
+  data = new int[capacity()];
+  std::copy(copied.data, copied.data + copied.capacity(), data);
 }
 
 Matrix& Matrix::operator=(const Matrix& equal) {
   if (equal.data != data) {
-    if (equal.rows_num * equal.columns_num == rows_num * columns_num) {
-      std::copy(equal.data, equal.data + rows_num * columns_num, data);
+    if (equal.capacity() == capacity()) {
+      std::copy(equal.data, equal.data + equal.capacity(), data);
     } else {
       Matrix tmp(equal);
       std::swap(tmp.data, data);
     }
+
     rows_num = equal.rows_num;
     columns_num = equal.columns_num;
   }
+
   return *this;
 }
 
@@ -72,9 +76,9 @@ std::pair<size_t, size_t> Matrix::getSize() const {
   return {rows_num, columns_num};
 }
 
-Matrix Matrix::operator*=(double alpha) {
-  for (size_t i = 0; i < columns_num * rows_num; i++) {
-    data[i] *= alpha;
+Matrix Matrix::operator*=(int scalar) {
+  for (size_t i = 0; i < capacity(); i++) {
+    data[i] *= scalar;
   }
 
   return *this;
@@ -88,7 +92,7 @@ Matrix operator+(const Matrix& lhs, const Matrix& rhs) {
   const auto [rows_num, columns_num] = lhs.getSize();
   Matrix result(rows_num, columns_num);
 
-  for (size_t i = 0; i < rows_num * columns_num; i++) {
+  for (size_t i = 0; i < result.capacity(); i++) {
     result.data[i] = lhs.data[i] + rhs.data[i];
   }
 
@@ -100,10 +104,9 @@ bool operator==(const Matrix& lhs, const Matrix& rhs) {
     throw std::out_of_range("sizes of matrices are not equal");
   }
 
-  const auto [rows_num, columns_num] = lhs.getSize();
   bool result = true;
 
-  for (size_t i = 0; i < rows_num * columns_num; i++) {
+  for (size_t i = 0; i < lhs.capacity(); i++) {
     if (lhs.data[i] != rhs.data[i]) {
       result = false;
       break;

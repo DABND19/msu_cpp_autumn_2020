@@ -3,7 +3,7 @@ FLAGS=-std=c++17
 
 all: my_matrix
 
-my_matrix: main.o Matrix.o
+my_matrix: main.o Matrix.o test_runner.h
 	$(CC) $(FLAGS) -o my_matrix main.o Matrix.o
 
 main.o: main.cpp
