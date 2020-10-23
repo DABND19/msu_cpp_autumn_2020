@@ -39,15 +39,16 @@ Matrix::Matrix(const Matrix& copied) {
 }
 
 Matrix& Matrix::operator=(const Matrix& equal) {
-  if (equal.rows_num * equal.columns_num == rows_num * columns_num) {
-    std::copy(equal.data, equal.data + rows_num * columns_num, data);
-  } else {
-    Matrix tmp(equal);
-    std::swap(tmp.data, data);
+  if (equal.data != data) {
+    if (equal.rows_num * equal.columns_num == rows_num * columns_num) {
+      std::copy(equal.data, equal.data + rows_num * columns_num, data);
+    } else {
+      Matrix tmp(equal);
+      std::swap(tmp.data, data);
+    }
+    rows_num = equal.rows_num;
+    columns_num = equal.columns_num;
   }
-  rows_num = equal.rows_num;
-  columns_num = equal.columns_num;
-
   return *this;
 }
 
