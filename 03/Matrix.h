@@ -18,14 +18,13 @@ class Matrix {
 
    public:
     Row(const Matrix& matrix, size_t row_num);
-    int& operator[](size_t j);
+    int& operator[](size_t column_num);
     int operator[](size_t column_num) const;
     size_t getSize() const;
   };
 
   Matrix(size_t rows, size_t columns);
-  Matrix(Matrix&& equal);
-  Matrix(const Matrix& equal);
+  Matrix(const Matrix& copied);
   Row operator[](size_t row_num) const;
   Row operator[](size_t row_num);
   std::pair<size_t, size_t> getSize() const;
