@@ -26,6 +26,6 @@ class BigInt {
   static const size_t RANKS_LEN = std::numeric_limits<int>::digits10 - 1;
   const size_t RADIX =
       static_cast<size_t>(std::pow(10, RANKS_LEN + 1));
-  Vector<int> data;
+  Vector<int> ranks;
   bool is_negative = false;
 };

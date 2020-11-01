@@ -19,8 +19,8 @@ class Vector {
   size_t capacity() const { return capacity_; }
   T* begin() { return data_; }
   T* end() { return data_ + size_; }
-  T const* begin() const { return data_; }
-  T const* end() const { return data_ + size_; }
+  const T* begin() const { return data_; }
+  const T* end() const { return data_ + size_; }
   const T& back() const;
   T& back();
   const T& operator[](size_t index) const;
@@ -127,10 +127,7 @@ void Vector<T>::reserve(size_t new_cap) {
 template <typename T>
 void Vector<T>::push_back(const T& value) {
   if (size_ == capacity_) {
-    auto new_capacity = capacity_ * 2;
-    if (capacity_ == 0) {
-      new_capacity = 1;
-    }
+    auto new_capacity = capacity_ == 0 ? 1 : capacity_ * 2;
     reserve(new_capacity);
   }
 
@@ -141,10 +138,7 @@ void Vector<T>::push_back(const T& value) {
 template <typename T>
 void Vector<T>::push_back(T&& value) {
   if (size_ == capacity_) {
-    auto new_capacity = capacity_ * 2;
-    if (capacity_ == 0) {
-      new_capacity = 1;
-    }
+    auto new_capacity = capacity_ == 0 ? 1 : capacity_ * 2;
     reserve(new_capacity);
   }
 

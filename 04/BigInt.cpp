@@ -29,6 +29,7 @@ BigInt::BigInt(const std::string& number) {
 
   //разрежем строку по RANKS_LEN символов с конца
   //и таким образом парсим разряды
+  ranks.reserve(view.size() / RANKS_LEN + 1);
   while (view.size()) {
     size_t rank_begin = RANKS_LEN < view.size() ? view.size() - RANKS_LEN : 0;
     auto rank_view = view.substr(rank_begin);
@@ -44,25 +45,25 @@ BigInt::BigInt(const std::string& number) {
         isspace(rank_view[0])) {
       throw std::invalid_argument(number + " is not a number.");
     }
-    data.push_back(rank);
+    ranks.push_back(rank);
     view.remove_suffix(rank_view.size());
   }
 }
 
 BigInt& BigInt::operator=(const BigInt& copied) {
-  data = copied.data;
+  ranks = copied.ranks;
   is_negative = copied.is_negative;
   return *this;
 }
 
 BigInt& BigInt::operator=(BigInt&& moved) {
-  data = std::move(moved.data);
+  ranks = std::move(moved.ranks);
   is_negative = moved.is_negative;
   return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& number) {
-  if (number.data.size() == 0) {
+  if (number.ranks.size() == 0) {
     os << 0;
     return os;
   }
@@ -72,11 +73,11 @@ std::ostream& operator<<(std::ostream& os, const BigInt& number) {
   }
 
   os << std::setfill('0');
-  for (size_t i = number.data.size(); i > 0; i--) {
-    if (i != number.data.size()) {
+  for (size_t i = number.ranks.size(); i > 0; i--) {
+    if (i != number.ranks.size()) {
       os << std::setw(BigInt::RANKS_LEN);
     }
-    os << number.data[i - 1];
+    os << number.ranks[i - 1];
   }
 
   return os;
@@ -99,10 +100,10 @@ BigInt BigInt::operator-() {
 /*
 BigInt operator+(const BigInt& lhs, const BigInt& rhs) {
   BigInt result;
-  size_t max_size = std::max(lhs.data.size(), rhs.data.size());
-  size_t min_size = std::min(lhs.data.size(), rhs.data.size());
-  result.data.reserve(max_size + 1);
-  Vector<int> overflow(result.data.size());
+  size_t max_size = std::max(lhs.ranks.size(), rhs.ranks.size());
+  size_t min_size = std::min(lhs.ranks.size(), rhs.ranks.size());
+  result.ranks.reserve(max_size + 1);
+  Vector<int> overflow(result.ranks.size());
 
   for (size_t i = 0; i < min_size; i++) {
 
