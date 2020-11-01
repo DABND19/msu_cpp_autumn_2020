@@ -9,18 +9,23 @@ template <typename T>
 class Vector {
  public:
   Vector() = default;
-  Vector(size_t size);
-  Vector(size_t size, const T& value);
+  Vector(size_t size_);
+  Vector(size_t size_, const T& value);
   Vector(const Vector& copied);
   Vector(Vector&& moved);
   Vector& operator=(const Vector& copied);
   Vector& operator=(Vector&& moved);
   size_t size() const { return size_; }
   size_t capacity() const { return capacity_; }
-  T* begin() const { return data_; }
-  T* end() const { return data_ + size_; }
+  T* begin() { return data_; }
+  T* end() { return data_ + size_; }
+  T const* begin() const { return data_; }
+  T const* end() const { return data_ + size_; }
+  const T& back() const;
+  T& back();
   const T& operator[](size_t index) const;
   T& operator[](size_t index);
+  void reserve(size_t new_cap);
   void push_back(const T& value);
   void push_back(T&& value);
   ~Vector();
@@ -32,12 +37,12 @@ class Vector {
 };
 
 template <typename T>
-Vector<T>::Vector(size_t size)
-    : data_(new T[size]), capacity_(size), size_(size) {}
+Vector<T>::Vector(size_t size_)
+    : data_(new T[size_]), capacity_(size_), size_(size_) {}
 
 template <typename T>
-Vector<T>::Vector(size_t size, const T& value)
-    : data_(new T[size]), capacity_(size), size_(size) {
+Vector<T>::Vector(size_t size_, const T& value)
+    : data_(new T[size_]), capacity_(size_), size_(size_) {
   std::fill(begin(), end(), value);
 }
 
@@ -109,14 +114,24 @@ T& Vector<T>::operator[](size_t index) {
 }
 
 template <typename T>
+void Vector<T>::reserve(size_t new_cap) {
+  if (new_cap > capacity_) {
+    auto new_data = new T[new_cap];
+    std::move(data_, data_ + capacity_, new_data);
+    delete[] data_;
+    data_ = new_data;
+    capacity_ = new_cap;
+  }
+}
+
+template <typename T>
 void Vector<T>::push_back(const T& value) {
   if (size_ == capacity_) {
+    auto new_capacity = capacity_ * 2;
     if (capacity_ == 0) {
-      capacity_ = 1;
-    } else {
-      capacity_ *= 2;
+      new_capacity = 1;
     }
-    data_ = (T*)realloc(data_, capacity_ * sizeof(T));
+    reserve(new_capacity);
   }
 
   data_[size_] = value;
@@ -126,14 +141,31 @@ void Vector<T>::push_back(const T& value) {
 template <typename T>
 void Vector<T>::push_back(T&& value) {
   if (size_ == capacity_) {
+    auto new_capacity = capacity_ * 2;
     if (capacity_ == 0) {
-      capacity_ = 1;
-    } else {
-      capacity_ *= 2;
+      new_capacity = 1;
     }
-    data_ = (T*)realloc(data_, capacity_ * sizeof(T));
+    reserve(new_capacity);
   }
 
-  data_[size_] = std::move(value);
+  data_[size_] = value;
   size_++;
+}
+
+template <typename T>
+const T& Vector<T>::back() const {
+  if (size == 0) {
+    throw std::out_of_range("Vector is empty.");
+  }
+
+  return data_[size_ - 1];
+}
+
+template <typename T>
+T& Vector<T>::back() {
+  if (size == 0) {
+    throw std::out_of_range("Vector is empty.");
+  }
+
+  return data_[size_ - 1];
 }

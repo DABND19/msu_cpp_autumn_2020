@@ -1,18 +1,11 @@
 #include <iostream>
-#include "Vector.h"
+#include "BigInt.h"
 
 using namespace std;
 
 int main() {
-  Vector<double> b;
-  b.push_back(1);
-  cout << b[0] << endl;
-  cout << b.capacity() << endl;
-  b.push_back(1);
-  cout << b.capacity() << endl;
-  b.push_back(1);
-  cout << b.capacity() << endl;
-  b.push_back(1);
-  cout << b.capacity() << endl;
+  BigInt a("12345678  123235");
+  //cin >> a;
+  cout << a << endl;
   return 0;
 }
