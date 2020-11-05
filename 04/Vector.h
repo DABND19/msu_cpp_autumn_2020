@@ -40,7 +40,9 @@ class Vector {
 
 template <typename T>
 Vector<T>::Vector(size_t size_)
-    : data_(new T[size_]), capacity_(size_), size_(size_) {}
+    : data_(new T[size_]), capacity_(size_), size_(size_) {
+  std::fill(begin(), end(), T());
+}
 
 template <typename T>
 Vector<T>::Vector(size_t size_, const T& value)

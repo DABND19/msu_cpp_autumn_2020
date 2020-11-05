@@ -5,9 +5,9 @@
 
 #include "Parse.h"
 
-BigInt::BigInt(int num) {
+BigInt::BigInt(int32_t num) {
   if (num != 0) {
-    ranks = Vector<int>();
+    ranks = Vector<int32_t>();
     is_negative = num < 0;
     num = abs(num);
     while (num) {
@@ -17,10 +17,10 @@ BigInt::BigInt(int num) {
   }
 }
 
-BigInt::BigInt(Vector<int>&& ranks, bool is_negative)
+BigInt::BigInt(Vector<int32_t>&& ranks, bool is_negative)
     : ranks(std::move(ranks)), is_negative(is_negative) {
   if (this->ranks.empty()) {
-    this->ranks = Vector<int>(1, 0);
+    this->ranks = Vector<int32_t>(1, 0);
   }
 
   while (this->ranks.size() > 1 && !this->ranks.back()) {
@@ -33,12 +33,7 @@ BigInt::BigInt(const std::string& str_num) {
 
   removeSpacesAround(view);
   is_negative = parseAndRemoveSign(view);
-  ranks = parseRanks(view, RANK_LEN);
-
-  if (ranks.empty()) {
-    ranks = Vector<int>(1, 0);
-    is_negative = false;
-  }
+  *this = BigInt(std::move(parseRanks(view, RANK_LEN)), is_negative);
 }
 
 BigInt::BigInt(const BigInt& copied)
@@ -61,7 +56,7 @@ BigInt& BigInt::operator=(BigInt&& moved) {
   return *this;
 }
 
-int BigInt::sgn() const {
+int32_t BigInt::sgn() const {
   if (ranks.back() == 0 || ranks.empty()) {
     return 0;
   }
@@ -80,7 +75,7 @@ BigInt BigInt::operator-() const {
   return result;
 }
 
-int BigInt::operator[](size_t index) const {
+int32_t BigInt::operator[](size_t index) const {
   if (index >= ranks.size()) {
     return 0;
   }
@@ -126,12 +121,12 @@ bool operator>(const BigInt& lhs, const BigInt& rhs) { return !(lhs <= rhs); }
 
 bool operator>=(const BigInt& lhs, const BigInt& rhs) { return !(lhs < rhs); }
 
-Vector<int> sumRanks(const BigInt& lhs, const BigInt& rhs) {
-  Vector<int> ranks_sum;
+Vector<int32_t> sumRanks(const BigInt& lhs, const BigInt& rhs) {
+  Vector<int32_t> ranks_sum;
   ranks_sum.reserve(std::max(lhs.order(), rhs.order()) + 1);
-  int overflow = 0;
+  int32_t overflow = 0;
   for (size_t i = 0; i < std::max(lhs.order(), rhs.order()); i++) {
-    int sum = abs(overflow + lhs[i] + rhs[i]);
+    int32_t sum = abs(overflow + lhs[i] + rhs[i]);
     overflow = sum / RADIX;
     sum %= RADIX;
     ranks_sum.push_back(sum);
@@ -140,12 +135,12 @@ Vector<int> sumRanks(const BigInt& lhs, const BigInt& rhs) {
   return ranks_sum;
 }
 
-Vector<int> diffRanks(const BigInt& long_num, const BigInt& short_num) {
-  Vector<int> ranks_diff;
+Vector<int32_t> diffRanks(const BigInt& long_num, const BigInt& short_num) {
+  Vector<int32_t> ranks_diff;
   ranks_diff.reserve(long_num.order());
-  int overflow = 0;
+  int32_t overflow = 0;
   for (size_t i = 0; i < long_num.order(); i++) {
-    int diff = abs(long_num[i]) - abs(short_num[i]) + overflow;
+    int32_t diff = abs(long_num[i]) - abs(short_num[i]) + overflow;
     overflow = diff < 0 ? -1 : 0;
     if (diff < 0) {
       diff += RADIX;
@@ -157,8 +152,8 @@ Vector<int> diffRanks(const BigInt& long_num, const BigInt& short_num) {
 }
 
 BigInt operator+(const BigInt& lhs, const BigInt& rhs) {
-  Vector<int> ranks_sum;
-  int sgn_sum;
+  Vector<int32_t> ranks_sum;
+  int32_t sgn_sum;
 
   if (lhs.sgn() == rhs.sgn()) {
     sgn_sum = lhs.sgn();
@@ -191,21 +186,22 @@ BigInt operator+(const BigInt& lhs, const BigInt& rhs) {
 BigInt operator-(const BigInt& lhs, const BigInt& rhs) { return lhs + (-rhs); }
 
 BigInt operator*(const BigInt& lhs, const BigInt& rhs) {
-  int sgn_prod = lhs.sgn() * rhs.sgn();
+  int32_t sgn_prod = lhs.sgn() * rhs.sgn();
   if (sgn_prod == 0) {
     return 0;
   }
 
-  Vector<int> rank_prod(lhs.order() + rhs.order() + 1);
+  Vector<int32_t> rank_prod(lhs.order() + rhs.order() + 1);
 
   int64_t overflow = 0;
   for (size_t i = 0; i < lhs.order(); i++) {
     for (size_t j = 0; j < rhs.order(); j++) {
-      int64_t prod = rank_prod[i + j] +
+      int64_t prod = static_cast<int64_t>(rank_prod[i + j]) +
                      static_cast<int64_t>(abs(lhs[i])) *
                          static_cast<int64_t>(abs(rhs[j])) +
                      overflow;
-      rank_prod[i + j] = prod % static_cast<int64_t>(RADIX);
+      rank_prod[i + j] =
+          static_cast<int32_t>(prod % static_cast<int64_t>(RADIX));
       overflow = prod / static_cast<int64_t>(RADIX);
     }
   }
@@ -214,9 +210,7 @@ BigInt operator*(const BigInt& lhs, const BigInt& rhs) {
 }
 
 BigInt& BigInt::operator+=(const BigInt& rval) { return *this = *this + rval; }
-
 BigInt& BigInt::operator-=(const BigInt& rval) { return *this = *this - rval; }
-
 BigInt& BigInt::operator*=(const BigInt& rval) { return *this = *this * rval; }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& num) {

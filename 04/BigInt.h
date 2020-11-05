@@ -7,17 +7,17 @@
 
 #include "Vector.h"
 
-static const size_t RANK_LEN = std::numeric_limits<int>::digits10;
-const int RADIX = static_cast<int>(std::pow(10, RANK_LEN));
+static const size_t RANK_LEN = std::numeric_limits<int32_t>::digits10;
+const int32_t RADIX = static_cast<int32_t>(std::pow(10, RANK_LEN));
 
 class BigInt {
-  Vector<int> ranks = Vector<int>(1, 0);
+  Vector<int32_t> ranks = Vector<int32_t>(1, 0);
   bool is_negative = false;
 
  public:
   BigInt() = default;
-  BigInt(int num);
-  BigInt(Vector<int>&& ranks, bool is_negative);
+  BigInt(int32_t num);
+  BigInt(Vector<int32_t>&& ranks, bool is_negative);
   BigInt(const std::string& str_num);
   BigInt(const BigInt& copied);
   BigInt(BigInt&& moved);
@@ -25,9 +25,9 @@ class BigInt {
   BigInt& operator=(const BigInt& copied);
   BigInt& operator=(BigInt&& moved);
 
-  int sgn() const;
+  int32_t sgn() const;
   BigInt operator-() const;
-  int operator[](size_t index) const;
+  int32_t operator[](size_t index) const;
   size_t order() const { return ranks.size(); }
 
   BigInt& operator+=(const BigInt& rval);
