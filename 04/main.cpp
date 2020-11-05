@@ -157,12 +157,21 @@ void TestArithmetic() {
   }
 }
 
+void TestOutput() {
+  const string num = "100000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    BigInt a(num);
+    stringstream out;
+    out << a;
+    ASSERT_EQUAL(num, out.str());
+}
+
 void RunTests() {
   TestRunner tr;
   RUN_TEST(tr, TestCtors);
   RUN_TEST(tr, TestAssignmentOps);
   RUN_TEST(tr, TestCompOps);
   RUN_TEST(tr, TestArithmetic);
+  RUN_TEST(tr, TestOutput);
 }
 
 int main() {
