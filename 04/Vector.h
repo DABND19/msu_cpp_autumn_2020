@@ -28,6 +28,8 @@ class Vector {
   void reserve(size_t new_cap);
   void push_back(const T& value);
   void push_back(T&& value);
+  bool empty() const { return size_ == 0; }
+  void pop_back();
   ~Vector();
 
  private:
@@ -148,7 +150,7 @@ void Vector<T>::push_back(T&& value) {
 
 template <typename T>
 const T& Vector<T>::back() const {
-  if (size == 0) {
+  if (empty()) {
     throw std::out_of_range("Vector is empty.");
   }
 
@@ -157,9 +159,16 @@ const T& Vector<T>::back() const {
 
 template <typename T>
 T& Vector<T>::back() {
-  if (size == 0) {
+  if (empty()) {
     throw std::out_of_range("Vector is empty.");
   }
 
   return data_[size_ - 1];
+}
+
+template <typename T>
+void Vector<T>::pop_back() {
+  if (!empty()) {
+    size_--;
+  }
 }
