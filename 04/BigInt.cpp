@@ -193,19 +193,17 @@ BigInt operator*(const BigInt& lhs, const BigInt& rhs) {
 
   Vector<int32_t> rank_prod(lhs.order() + rhs.order() + 1);
 
-  int64_t overflow = 0;
   for (size_t i = 0; i < lhs.order(); i++) {
-    for (size_t j = 0; j < rhs.order(); j++) {
-      int64_t prod = static_cast<int64_t>(rank_prod[i + j]) +
-                     static_cast<int64_t>(abs(lhs[i])) *
-                         static_cast<int64_t>(abs(rhs[j])) +
-                     overflow;
+    int64_t overflow = 0;
+    for (size_t j = 0; j < rhs.order() || overflow != 0; j++) {
+      int64_t prod =
+          overflow + static_cast<int64_t>(rank_prod[i + j]) +
+          static_cast<int64_t>(abs(lhs[i])) * static_cast<int64_t>(abs(rhs[j]));
       rank_prod[i + j] =
           static_cast<int32_t>(prod % static_cast<int64_t>(RADIX));
       overflow = prod / static_cast<int64_t>(RADIX);
     }
   }
-  rank_prod[lhs.order() + rhs.order()] = overflow;
   return BigInt(std::move(rank_prod), sgn_prod == -1);
 }
 
