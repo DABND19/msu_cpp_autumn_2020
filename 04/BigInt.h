@@ -7,7 +7,7 @@
 
 #include "Vector.h"
 
-static const size_t RANK_LEN = std::numeric_limits<int>::digits10;
+static const size_t RANK_LEN = std::numeric_limits<int32_t>::digits10;
 const int32_t RADIX = static_cast<int32_t>(std::pow(10, RANK_LEN));
 
 class BigInt {
