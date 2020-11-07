@@ -80,14 +80,14 @@ int32_t BigInt::operator[](size_t index) const {
     return 0;
   }
 
-  return sgn() * ranks[index];
+  return ranks[index];
 }
 
 bool operator<(const BigInt& lhs, const BigInt& rhs) {
   if (lhs.sgn() == rhs.sgn()) {
     for (size_t i = std::max(lhs.order(), rhs.order()); i > 0; i--) {
       if (lhs[i - 1] != rhs[i - 1]) {
-        return lhs[i - 1] < rhs[i - 1];
+        return lhs[i - 1] * lhs.sgn() < rhs[i - 1] * rhs.sgn();
       }
     }
 
@@ -121,12 +121,13 @@ bool operator>(const BigInt& lhs, const BigInt& rhs) { return !(lhs <= rhs); }
 
 bool operator>=(const BigInt& lhs, const BigInt& rhs) { return !(lhs < rhs); }
 
+//обычное сложение "в столбик" без учета знаков
 Vector<int32_t> sumRanks(const BigInt& lhs, const BigInt& rhs) {
   Vector<int32_t> ranks_sum;
   ranks_sum.reserve(std::max(lhs.order(), rhs.order()) + 1);
   int32_t overflow = 0;
-  for (size_t i = 0; i < std::max(lhs.order(), rhs.order()); i++) {
-    int32_t sum = abs(overflow + lhs[i] + rhs[i]);
+  for (size_t i = 0; i < std::max(lhs.order(), rhs.order()) || overflow; i++) {
+    int32_t sum = overflow + lhs[i] + rhs[i];
     overflow = sum / RADIX;
     sum %= RADIX;
     ranks_sum.push_back(sum);
@@ -135,12 +136,13 @@ Vector<int32_t> sumRanks(const BigInt& lhs, const BigInt& rhs) {
   return ranks_sum;
 }
 
+//обычное вычитание "в столбик" без учета знаков
 Vector<int32_t> diffRanks(const BigInt& long_num, const BigInt& short_num) {
   Vector<int32_t> ranks_diff;
   ranks_diff.reserve(long_num.order());
   int32_t overflow = 0;
   for (size_t i = 0; i < long_num.order(); i++) {
-    int32_t diff = abs(long_num[i]) - abs(short_num[i]) + overflow;
+    int32_t diff = long_num[i] - short_num[i] + overflow;
     overflow = diff < 0 ? -1 : 0;
     if (diff < 0) {
       diff += RADIX;
@@ -151,6 +153,23 @@ Vector<int32_t> diffRanks(const BigInt& long_num, const BigInt& short_num) {
   return ranks_diff;
 }
 
+bool absGreater(const BigInt& lhs, const BigInt& rhs) {
+  bool result = true;
+
+  if (lhs.order() == rhs.order()) {
+    for (size_t i = lhs.order(); i > 0; i--) {
+      if (lhs[i - 1] != rhs[i - 1]) {
+        result = lhs[i - 1] > rhs[i - 1];
+        break;
+      }
+    }
+  } else {
+    result = lhs.order() > rhs.order();
+  }
+
+  return result;
+}
+
 BigInt operator+(const BigInt& lhs, const BigInt& rhs) {
   Vector<int32_t> ranks_sum;
   int32_t sgn_sum;
@@ -159,19 +178,7 @@ BigInt operator+(const BigInt& lhs, const BigInt& rhs) {
     sgn_sum = lhs.sgn();
     ranks_sum = sumRanks(lhs, rhs);
   } else {
-    bool lhs_abs_greater = true;
-    if (lhs.order() == rhs.order()) {
-      for (size_t i = lhs.order(); i > 0; i--) {
-        if (abs(lhs[i - 1]) != abs(rhs[i - 1])) {
-          lhs_abs_greater = abs(lhs[i - 1]) > abs(rhs[i - 1]);
-          break;
-        }
-      }
-    } else {
-      lhs_abs_greater = lhs.order() > rhs.order();
-    }
-
-    if (lhs_abs_greater) {
+    if (absGreater(lhs, rhs)) {
       ranks_sum = diffRanks(lhs, rhs);
       sgn_sum = lhs.sgn();
     } else {
@@ -195,10 +202,10 @@ BigInt operator*(const BigInt& lhs, const BigInt& rhs) {
 
   for (size_t i = 0; i < lhs.order(); i++) {
     int64_t overflow = 0;
-    for (size_t j = 0; j < rhs.order() || overflow != 0; j++) {
+    for (size_t j = 0; j < rhs.order() || overflow; j++) {
       int64_t prod =
           overflow + static_cast<int64_t>(rank_prod[i + j]) +
-          static_cast<int64_t>(abs(lhs[i])) * static_cast<int64_t>(abs(rhs[j]));
+          static_cast<int64_t>(lhs[i]) * static_cast<int64_t>(rhs[j]);
       rank_prod[i + j] =
           static_cast<int32_t>(prod % static_cast<int64_t>(RADIX));
       overflow = prod / static_cast<int64_t>(RADIX);
@@ -221,7 +228,7 @@ std::ostream& operator<<(std::ostream& os, const BigInt& num) {
     if (i != num.order()) {
       os << std::setw(RANK_LEN);
     }
-    os << abs(num[i - 1]);
+    os << num[i - 1];
   }
 
   return os;

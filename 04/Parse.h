@@ -4,7 +4,6 @@
 #include <string>
 #include <string_view>
 #include <stdexcept>
-#include <vector>
 
 #include "Vector.h"
 
