@@ -33,7 +33,7 @@ BigInt::BigInt(const std::string& str_num) {
 
   removeSpacesAround(view);
   is_negative = parseAndRemoveSign(view);
-  *this = BigInt(std::move(parseRanks(view, RANK_LEN)), is_negative);
+  *this = BigInt(parseRanks(view, RANK_LEN), is_negative);
 }
 
 BigInt::BigInt(const BigInt& copied)

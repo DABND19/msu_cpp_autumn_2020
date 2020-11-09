@@ -176,5 +176,15 @@ void RunTests() {
 
 int main() {
   RunTests();
+  BigInt a(1);
+  int k = 0;
+  BigInt sum;
+  do {
+    sum += a;
+    a *= 2;
+    k++;
+  } while(k <= 100'000);
+  ASSERT_EQUAL(sum, a - 1)
+  cout << sum << endl;
   return 0;
 }
