@@ -21,7 +21,33 @@ struct Data {
   }
 };
 
-void YourTest() {
+void SaveTest() {
+  Data x = {1, true, 2};
+
+  std::stringstream stream;
+
+  Serializer serializer(stream);
+  auto status = serializer.save(x);
+
+  ASSERT_EQUAL(status, Error::NoError)
+  ASSERT_EQUAL(stream.str(), "1 true 2 ")
+}
+
+void LoadTest() {
+  Data x;
+
+  std::stringstream stream("1 true 2");
+
+  Deserializer serializer(stream);
+  auto status = serializer.load(x);
+
+  ASSERT_EQUAL(status, Error::NoError)
+  ASSERT_EQUAL(x.a, 1u)
+  ASSERT_EQUAL(x.b, true)
+  ASSERT_EQUAL(x.c, 2u)
+}
+
+void YourTests() {
   Data x = {1, true, 2};
 
   std::stringstream stream;
@@ -34,16 +60,18 @@ void YourTest() {
   Deserializer deserializer(stream);
   const Error err = deserializer.load(y);
 
-  ASSERT_EQUAL(err, Error::NoError);
+  ASSERT_EQUAL(err, Error::NoError)
 
-  ASSERT_EQUAL(x.a, y.a);
-  ASSERT_EQUAL(x.b, y.b);
-  ASSERT_EQUAL(x.c, y.c);
+  ASSERT_EQUAL(x.a, y.a)
+  ASSERT_EQUAL(x.b, y.b)
+  ASSERT_EQUAL(x.c, y.c)
 }
 
 void RunTests() {
   TestRunner tr;
-  RUN_TEST(tr, YourTest);
+  RUN_TEST(tr, SaveTest);
+  RUN_TEST(tr, LoadTest);
+  RUN_TEST(tr, YourTests);
 }
 
 int main() {
