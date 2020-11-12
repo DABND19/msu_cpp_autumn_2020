@@ -45,13 +45,38 @@ void LoadTest() {
   ASSERT_EQUAL(x.a, 1u)
   ASSERT_EQUAL(x.b, true)
   ASSERT_EQUAL(x.c, 2u)
+}
 
-  std::stringstream incorrect("-1 false 2");
-  Deserializer new_ser(incorrect);
+void IncorrectInputTest() {
+  //отрицательные числа
+  {
+    Data x;
 
-  status = new_ser.load(x);
+    std::stringstream stream("-1 true 2");
 
-  ASSERT_EQUAL(status, Error::CorruptedArchive)
+    Deserializer serializer(stream);
+    ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
+  }
+
+  //не числа
+  {
+    Data x;
+
+    std::stringstream stream("1a true 2");
+
+    Deserializer serializer(stream);
+    ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
+  }
+
+  //переполнение
+  {
+    Data x;
+
+    std::stringstream stream("99999999999999999999999999999999999999 true 2");
+
+    Deserializer serializer(stream);
+    ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
+  }
 }
 
 void YourTests() {
@@ -78,6 +103,7 @@ void RunTests() {
   TestRunner tr;
   RUN_TEST(tr, SaveTest);
   RUN_TEST(tr, LoadTest);
+  RUN_TEST(tr, IncorrectInputTest);
   RUN_TEST(tr, YourTests);
 }
 

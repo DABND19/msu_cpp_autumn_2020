@@ -49,20 +49,7 @@ Error Deserializer::load<uint64_t>(uint64_t& object) {
   if (is.peek() == '-') {
     return Error::CorruptedArchive;
   }
-
-  std::string value;
-  is >> value;
-  size_t pos;
-
-  try {
-    object = stoull(value, &pos);
-  } catch(std::logic_error&) {
-    return Error::CorruptedArchive;
-  }
-
-  if (pos != value.size()) {
-    return Error::CorruptedArchive;
-  }
+  is >> object;
 
   return is.fail() ? Error::CorruptedArchive : Error::NoError;
 }
