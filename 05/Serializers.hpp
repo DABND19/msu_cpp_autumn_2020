@@ -27,7 +27,7 @@ class Serializer {
   template <typename T, typename... ArgsT>
   Error process(const T& object, const ArgsT&... args);
 
-  Error process() { return Error::NoError; }
+  Error process();
 };
 
 #include "Serializer.ipp"
@@ -48,7 +48,7 @@ class Deserializer {
   template <typename T, typename... ArgsT>
   Error process(T& object, ArgsT&... args);
 
-  Error process() { return Error::NoError; }
+  Error process();
 };
 
 #include "Deserializer.ipp"

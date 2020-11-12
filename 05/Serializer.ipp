@@ -23,6 +23,10 @@ Error Serializer::process(const T& object, const ArgsT&... args) {
   return process(args...);
 }
 
+Error Serializer::process() {
+  return os.fail() ? Error::CorruptedArchive : Error::NoError;
+}
+
 template <>
 Error Serializer::save<bool>(const bool& object) {
   os << (object ? TRUE : FALSE) << Separator;

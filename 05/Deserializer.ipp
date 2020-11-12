@@ -23,6 +23,10 @@ Error Deserializer::process(T& object, ArgsT&... args) {
   return process(args...);
 }
 
+Error Deserializer::process() {
+  return is.fail() ? Error::CorruptedArchive : Error::NoError;
+}
+
 template <>
 Error Deserializer::load<bool>(bool& object) {
   std::string value;
