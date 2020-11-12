@@ -1,0 +1,47 @@
+#pragma once
+
+#include <string>
+
+#include "Serializers.hpp"
+
+template <typename T>
+Error Deserializer::load(T& object) {
+  return object.deserialize(*this);
+}
+
+template <typename... ArgsT>
+Error Deserializer::operator()(ArgsT&... args) {
+  return process(args...);
+}
+
+template <typename T, typename... ArgsT>
+Error Deserializer::process(T& object, ArgsT&... args) {
+  if (load(object) == Error::CorruptedArchive) {
+    return Error::CorruptedArchive;
+  }
+
+  return process(args...);
+}
+
+template <>
+Error Deserializer::load<bool>(bool& object) {
+  std::string value;
+  is >> value;
+
+  if (value == TRUE) {
+    object = true;
+  } else if (value == FALSE) {
+    object = false;
+  } else {
+    return Error::CorruptedArchive;
+  }
+
+  return is.fail() ? Error::CorruptedArchive : Error::NoError;
+}
+
+template <>
+Error Deserializer::load<uint64_t>(uint64_t& object) {
+  is >> object;
+
+  return is.fail() ? Error::CorruptedArchive : Error::NoError;
+}
