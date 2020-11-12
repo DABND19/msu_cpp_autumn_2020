@@ -77,6 +77,26 @@ void IncorrectInputTest() {
     Deserializer serializer(stream);
     ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
   }
+
+  //пустая строка
+  {
+    Data x;
+
+    std::stringstream stream("");
+
+    Deserializer serializer(stream);
+    ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
+  }
+
+  //мало параметров для считывания
+  {
+    Data x;
+
+    std::stringstream stream("1 false");
+
+    Deserializer serializer(stream);
+    ASSERT_EQUAL(serializer.load(x), Error::CorruptedArchive)
+  }
 }
 
 void YourTests() {
