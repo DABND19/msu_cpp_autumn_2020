@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdexcept>
 #include <string>
 
 #include "Serializers.hpp"
@@ -45,7 +46,23 @@ Error Deserializer::load<bool>(bool& object) {
 
 template <>
 Error Deserializer::load<uint64_t>(uint64_t& object) {
-  is >> object;
+  if (is.peek() == '-') {
+    return Error::CorruptedArchive;
+  }
+
+  std::string value;
+  is >> value;
+  size_t pos;
+
+  try {
+    object = stoull(value, &pos);
+  } catch(std::logic_error&) {
+    return Error::CorruptedArchive;
+  }
+
+  if (pos != value.size()) {
+    return Error::CorruptedArchive;
+  }
 
   return is.fail() ? Error::CorruptedArchive : Error::NoError;
 }

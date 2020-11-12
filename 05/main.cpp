@@ -46,10 +46,12 @@ void LoadTest() {
   ASSERT_EQUAL(x.b, true)
   ASSERT_EQUAL(x.c, 2u)
 
-  std::stringstream incorrect("1. 57 1e+3");
+  std::stringstream incorrect("-1 false 2");
   Deserializer new_ser(incorrect);
 
-  ASSERT_EQUAL(new_ser.load(x), Error::CorruptedArchive)
+  status = new_ser.load(x);
+
+  ASSERT_EQUAL(status, Error::CorruptedArchive)
 }
 
 void YourTests() {
