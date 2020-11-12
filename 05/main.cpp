@@ -11,7 +11,7 @@ struct Data {
   uint64_t c;
 
   template <class Serializer>
-  Error serialize(Serializer& serializer) {
+  Error serialize(Serializer& serializer) const {
     return serializer(a, b, c);
   }
 
@@ -41,7 +41,7 @@ void YourTest() {
   ASSERT_EQUAL(x.c, y.c);
 }
 
-void RunTests() { 
+void RunTests() {
   TestRunner tr;
   RUN_TEST(tr, YourTest);
 }
