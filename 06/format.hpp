@@ -11,12 +11,12 @@ size_t toSize_t(std::string_view num) {
   size_t result = 0;
 
   if (num.empty()) {
-    throw std::runtime_error("can't convert index.");
+    throw std::invalid_argument("can't convert num.");
   }
 
   for (auto digit : num) {
     if (!isdigit(digit)) {
-      throw std::runtime_error("can't convert index.");
+      throw std::invalid_argument("can't convert num.");
     }
 
     result = result * 10 + (digit - '0');
@@ -54,6 +54,8 @@ std::string format(std::string_view str, const ArgsT&... args) {
       result << arg.at(toSize_t(index_view));
     } catch (const std::out_of_range&) {
       throw std::runtime_error("invalid args seq.");
+    } catch (const std::invalid_argument&) {
+      throw std::runtime_error("invalid index.");
     }
 
     str.remove_prefix(right + 1);
