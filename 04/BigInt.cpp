@@ -204,11 +204,9 @@ BigInt operator*(const BigInt& lhs, const BigInt& rhs) {
     int64_t overflow = 0;
     for (size_t j = 0; j < rhs.order() || overflow; j++) {
       int64_t prod =
-          overflow + static_cast<int64_t>(rank_prod[i + j]) +
-          static_cast<int64_t>(lhs[i]) * static_cast<int64_t>(rhs[j]);
-      rank_prod[i + j] =
-          static_cast<int32_t>(prod % static_cast<int64_t>(RADIX));
-      overflow = prod / static_cast<int64_t>(RADIX);
+          overflow + rank_prod[i + j] + lhs[i] * static_cast<int64_t>(rhs[j]);
+      rank_prod[i + j] = prod % RADIX;
+      overflow = prod / RADIX;
     }
   }
   return BigInt(std::move(rank_prod), sgn_prod == -1);
