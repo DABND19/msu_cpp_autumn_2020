@@ -1,28 +1,19 @@
 #pragma once
 
-#include <iostream>
+#include <stdexcept>
 #include <string>
 
-class Exception {
+class InvalidArgs : public std::logic_error {
  public:
-  Exception(const std::string& msg) : message(msg) {}
-  const std::string& what() const { return message; }
-
- private:
-  const std::string message;
+  InvalidArgs(const std::string& msg) : std::logic_error(msg) {}
 };
 
-class InvalidArgs : public Exception {
+class InvalidIndex : public std::logic_error {
  public:
-  InvalidArgs(const std::string& msg) : Exception(msg) {}
+  InvalidIndex(const std::string& msg) : std::logic_error(msg) {}
 };
 
-class InvalidIndex : public Exception {
+class InvalidScopeSeq : public std::logic_error {
  public:
-  InvalidIndex(const std::string& msg) : Exception(msg) {}
-};
-
-class InvalidScopeSeq : public Exception {
- public:
-  InvalidScopeSeq(const std::string& msg) : Exception(msg) {}
+  InvalidScopeSeq(const std::string& msg) : std::logic_error(msg) {}
 };

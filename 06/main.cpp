@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iostream>
 
-#include "format.hpp"
 #include "Exception.hpp"
+#include "format.hpp"
 #include "test_runner.h"
 
 using namespace std;
