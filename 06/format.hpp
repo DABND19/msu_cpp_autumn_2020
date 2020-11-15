@@ -7,6 +7,8 @@
 #include <string_view>
 #include <vector>
 
+#include "Exception.hpp"
+
 size_t toSize_t(std::string_view num) {
   size_t result = 0;
 
@@ -46,16 +48,16 @@ std::string format(std::string_view str, const ArgsT&... args) {
 
     auto right = str.find('}');
     if (right == str.npos || right < left) {
-      throw std::runtime_error("invalid scope seq.");
+      throw InvalidScopeSeq(std::string(str));
     }
 
     auto index_view = str.substr(left + 1, right - (left + 1));
     try {
       result << arg.at(toSize_t(index_view));
     } catch (const std::out_of_range&) {
-      throw std::runtime_error("invalid args seq.");
+      throw InvalidArgs(std::string(index_view) + " invalid args sequence.");
     } catch (const std::invalid_argument&) {
-      throw std::runtime_error("invalid index.");
+      throw InvalidIndex(std::string(index_view) + " is not index");
     }
 
     str.remove_prefix(right + 1);

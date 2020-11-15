@@ -3,7 +3,7 @@ FLAGS=-std=c++17 -Wall
 
 all: my_format
 
-my_format: main.o format.hpp test_runner.h
+my_format: main.o Exception.hpp format.hpp test_runner.h
 	$(CC) $(FLAGS) -o my_format main.o
 
 main.o: main.cpp

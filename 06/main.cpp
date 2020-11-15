@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "format.hpp"
+#include "Exception.hpp"
 #include "test_runner.h"
 
 using namespace std;
@@ -26,7 +27,7 @@ void ExceptionsTests() {
     bool is_catched = false;
     try {
       auto text = format("{1} + {1} = {3}", 2, "one");
-    } catch (const std::runtime_error&) {
+    } catch (const InvalidArgs&) {
       is_catched = true;
     }
     ASSERT(is_catched)
@@ -37,7 +38,7 @@ void ExceptionsTests() {
     bool is_catched = false;
     try {
       auto text = format("{1} + {1} = {", 2, "one");
-    } catch (const std::runtime_error&) {
+    } catch (const InvalidScopeSeq&) {
       is_catched = true;
     }
     ASSERT(is_catched)
@@ -48,7 +49,7 @@ void ExceptionsTests() {
     bool is_catched = false;
     try {
       auto text = format("{1} + {1} = {}", 2, "one");
-    } catch (const std::runtime_error&) {
+    } catch (const InvalidIndex&) {
       is_catched = true;
     }
     ASSERT(is_catched)
@@ -59,7 +60,7 @@ void ExceptionsTests() {
     bool is_catched = false;
     try {
       auto text = format("{1.5} + {1} = {0}", 2, "one");
-    } catch (const std::runtime_error&) {
+    } catch (const InvalidIndex&) {
       is_catched = true;
     }
     ASSERT(is_catched)
@@ -70,7 +71,7 @@ void ExceptionsTests() {
     bool is_catched = false;
     try {
       auto text = format("{1} + 1} = {0}", 2, "one");
-    } catch (const std::runtime_error&) {
+    } catch (const InvalidScopeSeq&) {
       is_catched = true;
     }
     ASSERT(is_catched)
