@@ -51,7 +51,7 @@ Vector<T, Allocator>& Vector<T, Allocator>::operator=(const Vector& copied) {
 }
 
 template <typename T, class Allocator>
-Vector<T, Allocator>& Vector<T, Allocator>::operator=(const Vector&& moved) {
+Vector<T, Allocator>& Vector<T, Allocator>::operator=(Vector&& moved) {
   if (data_ != moved.data_) {
     Vector tmp(std::move(moved));
     std::swap(data_, tmp.data_);
@@ -135,7 +135,7 @@ void Vector<T, Allocator>::pop_back() {
 template <typename T, class Allocator>
 template <typename... ArgsT>
 T& Vector<T, Allocator>::emplace_back(ArgsT&&... args) {
-  push_back({std::move(args)...});
+  push_back(T(std::forward<ArgsT>(std::move(args))...));
   return back();
 }
 

@@ -47,7 +47,6 @@ class VectorIterator : public std::iterator<std::random_access_iterator_tag, T,
   Self operator-(ptrdiff_t shift) const { return {current_ - shift}; }
 
   Self& operator+=(ptrdiff_t shift) const { return *this = *this + shift; }
-
   Self& operator-=(ptrdiff_t shift) const { return *this = *this - shift; }
 
   RefT operator*() { return *current_; }

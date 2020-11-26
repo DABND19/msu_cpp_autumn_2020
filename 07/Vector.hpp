@@ -29,7 +29,7 @@ class Vector {
   Vector(const std::initializer_list<T>& values);
 
   Vector& operator=(const Vector& copied);
-  Vector& operator=(const Vector&& moved);
+  Vector& operator=(Vector&& moved);
 
   size_t size() const { return size_; }
   size_t capacity() const { return capacity_; }
