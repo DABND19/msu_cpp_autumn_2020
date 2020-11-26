@@ -1,5 +1,5 @@
 CC=g++
-FLAGS=-std=c++2a -Wall
+FLAGS=-std=c++17 -Wall
 
 all: my_vector
 
