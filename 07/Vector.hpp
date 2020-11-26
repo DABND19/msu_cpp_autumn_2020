@@ -3,9 +3,10 @@
 #include <iostream>
 #include <memory>
 
+#include "VectorAllocator.hpp"
 #include "VectorIterator.hpp"
 
-template <typename T, class Allocator = std::allocator<T>>
+template <typename T, class Allocator = VectorAllocator<T>>
 class Vector {
  public:
   using iterator = VectorIterator<T>;
@@ -148,7 +149,7 @@ class Vector {
     allocator_.construct(data_ + size_++, std::move(value));
   }
 
-  void pop_back() { allocator_.destroy(--size_); }
+  void pop_back() { allocator_.destroy(data_ + --size_); }
 };
 
 template <typename T, class Allocator>
