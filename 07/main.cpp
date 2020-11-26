@@ -86,6 +86,14 @@ void TestMethods() {
     v.resize(3);
     ASSERT_EQUAL(v.size(), 3u)
   }
+
+  {
+    Vector<string> v;
+    string str = "Hello";
+    v.push_back(std::move(str));
+
+    ASSERT(str.empty())
+  }
 }
 
 void RunTests() {
