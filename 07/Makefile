@@ -10,7 +10,7 @@ main.o: main.cpp
 	$(CC) $(FLAGS) -c main.cpp
 
 test: my_vector
-	./my_vector
+	valgrind ./my_vector
 
 clean:
 	rm -rf *.o my_vector

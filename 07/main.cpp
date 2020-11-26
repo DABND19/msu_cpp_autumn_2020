@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <memory>
 
 #include "Vector.hpp"
 #include "test_runner.h"
@@ -88,11 +89,24 @@ void TestMethods() {
   }
 
   {
-    Vector<string> v;
+    Vector<string, allocator<string>> v;
     string str = "Hello";
     v.push_back(std::move(str));
 
     ASSERT(str.empty())
+  }
+
+  {
+    Vector<pair<int, int>> v;
+    auto res = v.emplace_back(1, 1);
+
+    ASSERT(res == make_pair(1, 1))
+  }
+
+  {
+    Vector<string> v(1'000'000, "Hello");
+    v.clear();
+    ASSERT(v.empty())
   }
 }
 
