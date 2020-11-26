@@ -108,6 +108,16 @@ void TestMethods() {
     v.clear();
     ASSERT(v.empty())
   }
+
+  {
+    Vector<int> v = {1, 2, 3, 4, 5};
+    stringstream reverse;
+    for (auto it = v.rbegin(); it != v.rend(); it++) {
+      reverse << *it << ' ';
+    }
+
+    ASSERT_EQUAL("5 4 3 2 1 ", reverse.str())
+  }
 }
 
 void RunTests() {

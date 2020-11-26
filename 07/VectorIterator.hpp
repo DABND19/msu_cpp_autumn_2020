@@ -3,9 +3,8 @@
 #include <iterator>
 
 template <typename T, typename RefT = T&, typename PtrT = T*>
-class VectorIterator
-    : public std::iterator<std::random_access_iterator_tag, T, ptrdiff_t, PtrT,
-                           RefT> {
+class VectorIterator : public std::iterator<std::random_access_iterator_tag, T,
+                                            ptrdiff_t, PtrT, RefT> {
  public:
   using Self = VectorIterator;
 
